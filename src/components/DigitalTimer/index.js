@@ -11,7 +11,11 @@ export default class DigitalTimer extends Component {
   }
 
   runTimer = () => {
-    const {minutes, seconds} = this.state
+    const {seconds, timerSetterDisplay, isTimerRunning} = this.state
+    let {minutes} = this.state
+    if (minutes === 0 && seconds === 0 && !isTimerRunning) {
+      minutes = timerSetterDisplay
+    }
 
     if (seconds === 0 && minutes !== 0) {
       this.setState({
@@ -42,7 +46,7 @@ export default class DigitalTimer extends Component {
     console.log(isTimerRunning)
     if (!isTimerRunning) {
       console.log(1)
-      this.timerId = setInterval(this.runTimer, 1000)
+      this.timerId = setInterval(this.runTimer, 100)
       console.log(2)
     } else {
       clearInterval(this.timerId)
