@@ -46,7 +46,7 @@ export default class DigitalTimer extends Component {
     console.log(isTimerRunning)
     if (!isTimerRunning) {
       console.log(1)
-      this.timerId = setInterval(this.runTimer, 100)
+      this.timerId = setInterval(this.runTimer, 1000)
       console.log(2)
     } else {
       clearInterval(this.timerId)
