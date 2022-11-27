@@ -8,11 +8,13 @@ export default class DigitalTimer extends Component {
     isTimerRunning: false,
     timerSetterDisplay: 25,
     isTimerStopped: true,
+    tempCount: 0,
   }
 
   runTimer = () => {
     const {seconds, timerSetterDisplay, isTimerRunning} = this.state
     let {minutes} = this.state
+
     if (minutes === 0 && seconds === 0 && !isTimerRunning) {
       minutes = timerSetterDisplay
     }
@@ -31,6 +33,7 @@ export default class DigitalTimer extends Component {
         seconds: 0,
         isTimerRunning: false,
         isTimerStopped: true,
+        tempCount: 0,
       })
     } else {
       this.setState({
@@ -42,15 +45,31 @@ export default class DigitalTimer extends Component {
   }
 
   onStartPauseClick = () => {
-    const {isTimerRunning} = this.state
-    console.log(isTimerRunning)
+    const {isTimerRunning, minutes, tempCount, seconds} = this.state
+    if (tempCount === 0 && seconds === 0 && minutes !== 0) {
+      this.setState({
+        minutes: minutes - 1,
+        seconds: 59,
+        isTimerRunning: true,
+        isTimerStopped: false,
+        tempCount: tempCount + 1,
+      })
+    } else if (tempCount === 0 && minutes !== 0) {
+      this.setState({
+        seconds: seconds - 1,
+        isTimerRunning: true,
+        isTimerStopped: false,
+        tempCount: tempCount + 1,
+      })
+    }
+
     if (!isTimerRunning) {
       console.log(1)
       this.timerId = setInterval(this.runTimer, 1000)
       console.log(2)
     } else {
       clearInterval(this.timerId)
-      this.setState({isTimerRunning: !isTimerRunning})
+      this.setState({isTimerRunning: !isTimerRunning, tempCount: 0})
     }
   }
 
@@ -67,12 +86,10 @@ export default class DigitalTimer extends Component {
   onMinusClick = () => {
     const {timerSetterDisplay} = this.state
 
-    if (timerSetterDisplay > 1) {
-      this.setState({
-        timerSetterDisplay: timerSetterDisplay - 1,
-        minutes: timerSetterDisplay - 1,
-      })
-    }
+    this.setState({
+      timerSetterDisplay: timerSetterDisplay - 1,
+      minutes: timerSetterDisplay - 1,
+    })
   }
 
   onPlusClick = () =>
